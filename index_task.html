@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Решение задач: 6 головоломок</title>
+<style>
+:root{
+  --bg1:#0f1420;--bg2:#1a2338;--card:rgba(255,255,255,.05);--card-hi:rgba(255,255,255,.08);
+  --fg:#eef2f8;--mut:#8894ad;--ac:#7c5cff;--ac2:#22d3ee;--ok:#34d399;--er:#fb7185;
+  --bd:rgba(255,255,255,.1);
+  --grad:linear-gradient(135deg,#7c5cff 0%,#22d3ee 100%);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;color:var(--fg);
+  font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  padding:20px 16px 60px;max-width:680px;margin-inline:auto;
+  background:radial-gradient(1200px 600px at 10% -10%,rgba(124,92,255,.25),transparent 60%),
+             radial-gradient(900px 500px at 110% 10%,rgba(34,211,238,.18),transparent 60%),
+             linear-gradient(180deg,var(--bg1),var(--bg2));
+  background-attachment:fixed;min-height:100vh;
+}
+h1{
+  font-size:2rem;margin:.2em 0 .1em;font-weight:800;letter-spacing:-.02em;
+  background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;
+}
+p.s{color:var(--mut);margin:0 0 1.4em;font-size:.95rem}
+code{background:var(--card);padding:2px 6px;border-radius:6px;font-size:.9em;color:var(--ac2)}
+
+#vault{
+  display:flex;gap:8px;margin:16px 0 22px;flex-wrap:wrap;justify-content:center;
+}
+#vault b{
+  flex:1 1 0;min-width:44px;max-width:78px;text-align:center;
+  font:800 1.25rem/1 ui-monospace,"SF Mono",monospace;
+  border:1.5px solid var(--bd);border-radius:12px;padding:14px 4px;
+  background:var(--card);color:var(--mut);
+  transition:all .3s ease;position:relative;overflow:hidden;
+}
+#vault b::after{
+  content:"";position:absolute;inset:0;background:var(--grad);opacity:0;transition:opacity .3s;
+}
+#vault b span{position:relative;z-index:1}
+#vault b.on{
+  border-color:transparent;color:#0b1020;
+  box-shadow:0 0 0 1.5px var(--ac2),0 8px 24px -8px var(--ac2);
+  transform:translateY(-2px);
+}
+#vault b.on::after{opacity:1}
+
+section{
+  background:var(--card);border:1px solid var(--bd);border-radius:16px;
+  padding:18px 18px 16px;margin-bottom:14px;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:border-color .25s,transform .25s,box-shadow .25s;
+}
+section:hover{border-color:rgba(124,92,255,.35)}
+section h2{
+  font-size:1.05rem;margin:0 0 8px;font-weight:700;letter-spacing:-.01em;
+  display:flex;align-items:center;gap:10px;
+}
+section h2::before{
+  content:"";width:6px;height:18px;border-radius:3px;background:var(--grad);flex:none;
+}
+section>div{color:var(--fg);opacity:.92}
+pre{
+  background:rgba(0,0,0,.35);border:1px solid var(--bd);
+  padding:12px 14px;border-radius:10px;overflow-x:auto;
+  font:14px/1.55 ui-monospace,"SF Mono",monospace;margin:10px 0 2px;color:#d9e2f2;
+}
+.r{display:flex;gap:10px;margin-top:12px}
+input{
+  flex:1;font:inherit;padding:12px 14px;
+  border:1.5px solid var(--bd);border-radius:10px;
+  background:rgba(0,0,0,.25);color:var(--fg);transition:border-color .2s,box-shadow .2s;
+}
+input::placeholder{color:var(--mut)}
+input:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px rgba(124,92,255,.25)}
+button{
+  font:inherit;font-weight:700;padding:12px 20px;border:0;border-radius:10px;
+  background:var(--grad);color:#0b1020;cursor:pointer;
+  transition:transform .15s,box-shadow .2s,filter .2s;
+  white-space:nowrap;
+}
+button:hover{filter:brightness(1.08);box-shadow:0 8px 24px -8px var(--ac)}
+button:active{transform:scale(.97)}
+input:focus-visible,button:focus-visible{outline:none}
+
+.m{min-height:1.4em;margin-top:8px;font-weight:600;font-size:.95rem;transition:color .2s}
+.ok{color:var(--ok)}
+.er{color:var(--er)}
+
+section.done{
+  border-color:rgba(52,211,153,.5);
+  box-shadow:0 0 0 1px rgba(52,211,153,.25),0 12px 32px -16px rgba(52,211,153,.4);
+}
+section.done h2::before{background:linear-gradient(135deg,#34d399,#22d3ee)}
+
+#fin{
+  display:none;text-align:center;font-size:1.05rem;font-weight:700;
+  color:var(--fg);padding:20px 18px;margin-bottom:20px;
+  border-radius:16px;line-height:1.6;
+  background:linear-gradient(135deg,rgba(52,211,153,.15),rgba(34,211,238,.12));
+  border:1px solid rgba(52,211,153,.35);
+  box-shadow:0 12px 40px -16px rgba(52,211,153,.5);
+  animation:pop .5s ease;
+}
+@keyframes pop{
+  0%{opacity:0;transform:scale(.96) translateY(6px)}
+  100%{opacity:1;transform:scale(1) translateY(0)}
+}
+@media(max-width:420px){
+  h1{font-size:1.6rem}
+  #vault b{font-size:1.05rem;padding:11px 2px;min-width:38px}
+  button{padding:12px 14px}
+}
+
+/* Кнопка сброса — сверху справа */
+#reset-btn{
+  position:fixed;top:14px;right:14px;z-index:99;
+  display:none;align-items:center;gap:6px;
+  padding:10px 16px;border-radius:12px;
+  font:600 13px/1 system-ui,sans-serif;
+  background:rgba(20,26,40,.85);color:#fb7185;cursor:pointer;
+  border:1px solid rgba(251,113,133,.45);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 8px 24px -10px rgba(0,0,0,.6);
+  transition:transform .15s,background .2s,border-color .2s;
+}
+#reset-btn:hover{background:rgba(251,113,133,.15);border-color:#fb7185;transform:translateY(-1px)}
+#reset-btn:active{transform:scale(.96)}
+@media(max-width:420px){
+  #reset-btn{top:10px;right:10px;padding:8px 12px;font-size:12px}
+}
+</style></head><body>
+<h1>Решение задач</h1>
+<p class="s">Реши задачу и получи число — ASCII-код символа. Собери все шесть чисел, переведи их в символы по таблице ASCII и получи слово. Решать можно в любом порядке.</p>
+<div id="vault"></div><div id="fin"></div><main id="list"></main>
+<button id="reset-btn" title="Сбросить все ответы">↺ Сбросить всё</button>
+<script>
+const TASKS=[
+{"n":1,"t":"Двоичный код","q":"Каждые 8 бит — одна буква ASCII. Какое слово зашифровано? Ответ строчными латинскими буквами.","d":"01001001 01001110 01010100 01000101 01010010 01001110 01000101 01010100","a":"internet","g":"83"},
+{"n":2,"t":"Скобки","q":"Сколько скобок минимум нужно добавить, чтобы строка стала правильной скобочной последовательностью?","d":"(()))(()","a":"2","g":"69"},
+{"n":3,"t":"Сжатие повторов","q":"Число перед буквой показывает, сколько раз её повторить. Какое слово получится? Ответ строчными буквами.","d":"1C1O2M1I2T2E","a":"committee","g":"67"},
+{"n":4,"t":"Цезарь без ключа","q":"Каждая буква сдвинута на неизвестное число позиций (1-25). Найдите английское слово, ответ строчными буквами.","d":"ZLYCLY","a":"server","g":"82"},
+{"n":5,"t":"Лифт","q":"В здании 12 этажей. Лифт стартует с 1-го этажа. За один рейс он может подняться ровно на 4 этажа или спуститься ровно на 3 этажа. Какое минимальное число рейсов нужно, чтобы оказаться ровно на 10-м этаже?","d":"1 → 10;  +4 или −3 за рейс","a":"4","g":"69"},
+{"n":6,"t":"Где ошибка?","q":"В магическом квадрате 3×3 суммы по строкам, столбцам и диагоналям должны быть равны 15. Одна клетка испорчена. Укажите её как r2c3 (строка 2, столбец 3).","d":"2 7 6\n9 5 1\n4 9 8","a":"r3c2","g":"84"}
+];
+function norm(n,v){let s=v.toLowerCase().replace(/[^a-z0-9]/g,"");
+if(n===6){const d=s.match(/\d/g);if(d&&d.length===2)s="r"+d[0]+"c"+d[1]}return s}
+let solved={};try{solved=JSON.parse(localStorage.getItem("solved")||"{}")}catch(e){}
+const save=()=>{try{localStorage.setItem("solved",JSON.stringify(solved))}catch(e){}};
+const vault=document.getElementById("vault"),list=document.getElementById("list");
+const resetBtn=document.getElementById("reset-btn");
+
+function anySolved(){return Object.keys(solved).some(k=>solved[k])}
+
+function draw(){
+  vault.innerHTML=TASKS.map(t=>`<b class="${solved[t.n]?"on":""}"><span>${solved[t.n]?t.g:"?"}</span></b>`).join("");
+  TASKS.forEach(t=>document.getElementById("task-"+t.n).classList.toggle("done",!!solved[t.n]));
+  const all=TASKS.every(t=>solved[t.n]),f=document.getElementById("fin");
+  f.style.display=all?"block":"none";
+  if(all)f.innerHTML="🎉 Все задачи решены!<br>Коды символов: "+TASKS.map(t=>t.g).join(" — ")+"<br>Расшифруй их по таблице ASCII, чтобы получить слово, и покажи экран волонтёру.";
+  resetBtn.style.display=anySolved()?"flex":"none";
+}
+TASKS.forEach(t=>{
+  const s=document.createElement("section");s.id="task-"+t.n;
+  s.innerHTML=`<h2>${t.n}. ${t.t}</h2><div>${t.q}</div><pre>${t.d}</pre><div class="r"><input aria-label="Ответ к задаче ${t.n}" autocomplete="off" placeholder="Твой ответ"><button>Проверить</button></div><div class="m" role="status"></div>`;
+  const inp=s.querySelector("input"),msg=s.querySelector(".m"),check=()=>{
+    if(norm(t.n,inp.value)===t.a){
+      solved[t.n]=1;save();msg.className="m ok";
+      msg.textContent="✓ Верно! ASCII-код символа: "+t.g;draw();
+    } else {
+      msg.className="m er";msg.textContent="Пока не то. Перечитай условие и попробуй ещё.";
+    }
+  };
+  s.querySelector("button").onclick=check;
+  inp.onkeydown=e=>{if(e.key==="Enter")check()};
+  if(solved[t.n]){msg.className="m ok";msg.textContent="Решено. ASCII-код символа: "+t.g}
+  list.appendChild(s);
+});
+
+resetBtn.onclick=()=>{
+  if(confirm("Сбросить все ответы? Это действие нельзя отменить.")){
+    try{localStorage.removeItem("solved")}catch(e){}
+    solved={};
+    location.reload();
+  }
+};
+
+draw();
+if(location.hash){const e=document.querySelector(location.hash);e&&e.scrollIntoView()}
+</script></body></html>
