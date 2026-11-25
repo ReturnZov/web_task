@@ -1,0 +1,9 @@
+01101001 01101110 01100100 01101001 01100011 01100001 01110100 01101111 01110010 i n d i c a t o r
+soutrmka ucmdpwtk saoqdlie xnduhbqo lqencicd sikascni rvcnibui vkjniuab xpurklfb должно получиться и что написано в задании
+touertca ycmbpwtl caoyblia cndyhdro iqeogncd wikocmzi tvcnubet xkjeiuab vpurvefd исходные данные
+
+Файл с набор букв сравнивается с исходными буквами
+Если буквы совпадают - 1
+Если различаются - 0
+Так и получается бинарный код, комплектуем по 8 и переводим и получаем ответ
+indicator
